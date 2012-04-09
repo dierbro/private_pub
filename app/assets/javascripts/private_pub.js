@@ -57,13 +57,18 @@ function buildPrivatePub(doc) {
       if (message.eval) {
         eval(message.eval);
       }
-      if (callback = self.subscriptionCallbacks[message.channel]) {
-        callback(message.data, message.channel);
+      if (callbacks = self.subscriptionCallbacks[message.channel]) {
+        for (var i = 0; i < callbacks.length; i++) {
+          callbacks[i](message.data, message.channel);
+        }
       }
     },
 
     subscribe: function(channel, callback) {
-      self.subscriptionCallbacks[channel] = callback;
+      if(typeof self.subscriptionCallbacks[channel] === 'undefined'){
+        self.subscriptionCallbacks[channel] = []
+      }
+      self.subscriptionCallbacks[channel].push(callback);
     }
   };
   return self;

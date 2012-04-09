@@ -8,7 +8,15 @@ describe("PrivatePub", function() {
 
   it("adds a subscription callback", function() {
     pub.subscribe("hello", "callback");
-    expect(pub.subscriptionCallbacks["hello"]).toEqual("callback");
+    expect(pub.subscriptionCallbacks["hello"][0]).toEqual("callback");
+  });
+
+  it("adds multiple subscription callback", function() {
+    pub.subscribe("hello", "callback1");
+    pub.subscribe("hello", "callback2");
+    expect(pub.subscriptionCallbacks["hello"][0]).toEqual("callback1");
+    expect(pub.subscriptionCallbacks["hello"][1]).toEqual("callback2");
+    expect(pub.subscriptionCallbacks["hello"].length).toEqual(2);
   });
 
   it("has a fayeExtension which adds matching subscription signature and timestamp to outgoing message", function() {
